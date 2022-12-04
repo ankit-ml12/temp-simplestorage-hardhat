@@ -54,41 +54,37 @@ You can choose whatever network you want to work with in config.js file of hardh
 ✅to  metion you want to run above scipt on following network
 
 ✅To deploy on goerli network  use goerli instead of hardhat
-----------------------------------------------------------------------
 ✅before using any network you need to add that network in config.js
+that you can see in push
 ✅ yarn add dotenv
 
+cmd
+✅yarn hardhat run .\scripts\deploy.js --network goerli
 push{
     3ss
 }
-
-cmd
-yarn hardhat run .\scripts\deploy.js --network goerli
 ----------------------------------------------------
-for verification on etherscane 
-we use hardhat etherscane plugin 
-to install it we use
-yarn add @nomiclabs/hardhat-etherscan
-for verification we also required etherscane plugin so we need to register on etherscane 
-require it in config.js
-this api is cosider as password so we put it in .env
-we update this in config.js
-    etherscan:{
-       apiKey:ETHERSCANE_API_KEY, 
-    }
 
-code that you need to add in deploy.js
-========================================
-you can use this line of code to verify your code:- 
-npx hardhat verify --network mainnet DEPLOYED_CONTRACT_ADDRESS "Constructor argument 1"
+✅for verification on etherscane 
+✅we use hardhat etherscane plugin 
+✅to install it we use
+✅yarn add @nomiclabs/hardhat-etherscan
+✅for verification we also required etherscane plugin so we need to register on etherscane 
+✅require it in config.js
+✅this api is cosider as password so we put it in .env
+✅we update this in config.js
 
-but we go with advance way by creating a function
-we use run command from hardhat where run help us to run any hardhat task
-so require(run from hardhat);
+✅you can use this line of code to verify your code:- 
+✅npx hardhat verify --network mainnet DEPLOYED_CONTRACT_ADDRESS "Constructor argument 1"
+//learn more about it on hardhat docs
 
-we add this verify function in deploy.js to verify contract
+✅but we go with advance way by creating a function
+✅we use run command from hardhat where run help us to run any hardhat task
+✅so require{run} from hardhat;
+
+✅we add this verify function in deploy.js to verify contract
 ---
-async function verify(){
+✅async function verify(){
 console.log("verifying contract ....");
 try {
   await run("verify:verify", {
@@ -103,14 +99,14 @@ try {
   }
 }
 =========================================
-and call verify function at the end of the verification function
+✅and call verify function at the end of the verification function
  ---------------------------------------------------------------------------   
- for help use yarn hardhat verify --help
+ ✅for help use yarn hardhat verify --help
   let's think for a second. What happens when we deploy to our hard Hat Network? Well, remember, if we deploy to our Hard Hat Network, will our contract need to be verified we need to scan? Well, we know there's are different type of scane on etherscan like rinkbey, goeli or mainnet scane. But is there a Hardhead ether scan? No, of course not. Right? The hard at runtime environment is a network local to our machine. So it doesn't make sense for us to verify a hard hat network deployed contract on ether scan. So we actually don't want to call this verify function, when we're working with our local network. This is where these chain IDs are going to come in quite useful.
 
-now if we run command to deploy on hardhat network we need to stop verify function so we put some codition  before calling verification process
+✅now if we run command to deploy on hardhat network we need to stop verify function so we put some codition  before calling verification process
 
- if(network.config.chainId===5 && 1){
+ ✅if(network.config.chainId===5 && 1){
     await simpleStorage.deployTransaction.wait(6);
     await verify(simpleStorage.address, []);
   }
@@ -119,57 +115,13 @@ now if we run command to deploy on hardhat network we need to stop verify functi
 ==========================================================
   Interect with contract using hardhat 
 ======================================================
-  code{{{{{{{{{{{{{
-const {ethers, run, network} = require("hardhat")
+ 
+push "ss4"
 
-async function main(){
-  const SimpleStorageFactory = await ethers.getContractFactory("SimpleStorage");
-
-  console.log("Deploying Contract ....");
-  const simpleStorage = await SimpleStorageFactory.deploy();
-  await simpleStorage.deployed();
-  console.log(simpleStorage.address);
-  // console.log(network.config);
-  if(network.config.chainId==5 && process.env.ETHERSCANE_API_KEY){
-     await simpleStorage.deployTransaction.wait(6);
-     await verify(simpleStorage.address, []);
-  }
-  const currentValue= await simpleStorage.retrieve();
-  console.log(`current value is : ${currentValue}`);
-
-  //update the current value
-  const transactionResponse = await simpleStorage.store(7);
-  await transactionResponse.wait(1)
-  const updatedValue = await simpleStorage.retrieve();
-  console.log(`updatedValue is ${updatedValue}` );
-
-}
-
-async function verify(contractAddress, args){
-  console.log("Varifying contract ...........");
-   try {   
-     await run("verify:verify", {
-       address: contractAddress,
-       constructorArguments : args,
-     })
-   } catch (e) {
-       if (e.message.toLowerCase().includes("Allready Verified")) {
-               console.log("Allready Verified");
-       } else {
-              console.log(e);
-       }
-   }
-
-}
-
-main()
-.then(()=>process.exit(0))
-.catch((error)=>console.log(error));
-
-  }}}}}}}}}}}}}
-  run on hardhat as well on goerli network
-
-  ------------------------------------------------------------------------------
+run on hardhat as well on goerli network
+for default hardhat cmd is yarn hardhat run .\scripts\deploy.js
+for network 
+-----------------------------------------------------------------------------
   artifacts troubleshoting
   delete artifacts and catch file
   if artifacts file is not present in our root directory hardhat automatically recompile to the file
