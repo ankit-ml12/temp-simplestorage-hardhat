@@ -110,55 +110,51 @@ try {
     await simpleStorage.deployTransaction.wait(6);
     await verify(simpleStorage.address, []);
   }
-  for this require "network" from hardhat
+  ✅for this require "network" from hardhat
   ------------------------------------------------------------------------------
 ==========================================================
-  Interect with contract using hardhat 
-======================================================
+  ✅Interect with contract using hardhat 
  
-push "ss4"
-
+✅push 
+{
+    "ss4"
+}
 run on hardhat as well on goerli network
 for default hardhat cmd is yarn hardhat run .\scripts\deploy.js
-for network 
+======================================================
+
 -----------------------------------------------------------------------------
-  artifacts troubleshoting
+  ✅artifacts troubleshoting
   delete artifacts and catch file
   if artifacts file is not present in our root directory hardhat automatically recompile to the file
   ------------------------------------------------------------------------
-  create your custome task 
- create task folder 
- define task and then import it in config.js
-to see all talk use 
-yarn Hardhead
-to run task use 
-yarn hardhad <task name>
-yarn hardhat block-number --network goerli
+  ✅create your custome task 
+ ✅create task folder 
+ ✅define task and then import it in config.js
+✅to see all talk use 
+✅yarn Hardhead
+✅to run task use 
+✅yarn hardhad <task name>
+✅yarn hardhat block-number --network goerli
 
-you can use task on place of script or vice versa
-authore recommended to use script
-task is better for plugin and script is better for local environment
+✅you can use task on place of script or vice versa
+✅authore recommended to use script
+✅task is better for plugin and script is better for local environment
 ========================================
-const {task} = require('hardhat/config');
-
-task("block-number", "print the current block number")
-.setAction(
-    async (taskArgs, hre) =>{
-        const blockNumber = await hre.ethers.provider.getBlockNumber();
-        console.log(`current block number : ${blockNumber}`);
-    }
-)
-
-module.exports ={}
- 
+push{
+    ss5
+}
+========================================
 
 Note:-
 use require('./tasks/block-number');
 in cofige.js
 
-cmd:- 
+✅cmd:- 
 yarn hardhat block-number --network goerli
 =========================================
+
+
 Hardhad local host node
 everytime we use hardhat it's get deleted 
 so we use local host
