@@ -29,52 +29,39 @@ git clone <url>
     2ss
 }
 
-cmd
-yarn hardhat run .\scripts\deploy.js
-and terminal show
-Deploying Contract ....
-0x5FbDB2315678afecb367f032d93F642f64180aa3
-Done in 2.75s.
+✅cmd
+✅yarn hardhat run .\scripts\deploy.js
+✅and terminal show
+✅Deploying Contract ....
+✅0x5FbDB2315678afecb367f032d93F642f64180aa3
+✅Done in 2.75s.
 
-best part of above code is it is working without wallet private key and rpc url how???
+✅best part of above code is it is working without wallet private key and rpc url how???
 
-Hardhat comes built-in with Hardhat Network, a local Ethereum network node designed for development. It allows you to deploy your contracts, run your tests and debug your code, all within the confines of your local machine.
+✅Hardhat comes built-in with Hardhat Network, a local Ethereum network node designed for development. It allows you to deploy your contracts, run your tests and debug your code, all within the confines of your local machine.
 for more info read below article 
 ------------------------------------------------------------------------
- hard hat network
+ ✅hard hat network
  https://hardhat.org/hardhat-network/docs/overview
 
 
-Hardhat by default come with rpc url and private key
+✅Hardhat by default come with rpc url and private key
 You can choose whatever network you want to work with in config.js file of hardhat
-bydefault it is hardhat
+✅bydefault it is hardhat
 
-your can use this cmd for specific network
-yarn hardhat run .\scripts\deploy.js --network <-network name->
-to  metion you want to run above scipt on following network
+✅your can use this cmd for specific network
+✅yarn hardhat run .\scripts\deploy.js --network <-network name->
+✅to  metion you want to run above scipt on following network
 
-To deploy on goerli network  use goerli instead of hardhat
+✅To deploy on goerli network  use goerli instead of hardhat
 ----------------------------------------------------------------------
-before using any network you need to add that network in config.js
+✅before using any network you need to add that network in config.js
+✅ yarn add dotenv
 
-require("@nomicfoundation/hardhat-toolbox");
-require('dotenv').config()
+push{
+    3ss
+}
 
-const PRIVATE_KEY= process.env.GOERLI_PRIVATE_KEY
-const GOERLI_RPC_URL = process.env.GOERLI_RPC_URL
-
-/** @type import('hardhat/config').HardhatUserConfig */
-module.exports = {
-  defaultNetwork: "hardhat",
-  solidity: "0.8.17",
-  networks:{
-    goerli:{
-      url: GOERLI_RPC_URL, // got from alchemy
-      accounts:[PRIVATE_KEY], // from wallet
-      chainId: 5, // search on google for your network
-    },
-  }
-};
 cmd
 yarn hardhat run .\scripts\deploy.js --network goerli
 ----------------------------------------------------
