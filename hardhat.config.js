@@ -16,6 +16,11 @@ module.exports = {
       accounts:[PRIVATE_KEY], // from wallet
       chainId: 5, // search on google for your network
     },
+    localhost:{
+      url: "http://127.0.0.1:8545/", // get from hardhat command
+      // account don't need to provide :) thanks hardhat
+      chainId: 31337, // search on google for your network
+    }
   },
   etherscan:{
     apiKey:ETHERSCANE_API_KEY, 

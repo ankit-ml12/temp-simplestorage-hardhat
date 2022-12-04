@@ -145,45 +145,50 @@ push{
     ss5
 }
 ========================================
-
 Note:-
 use require('./tasks/block-number');
 in cofige.js
 
 ✅cmd:- 
 yarn hardhat block-number --network goerli
-=========================================
+===========================================
 
 
-Hardhad local host node
-everytime we use hardhat it's get deleted 
-so we use local host
+✅Hardhad local host node
+✅everytime we use hardhat it's get deleted 
+✅so we have another way to use hardhat network as a test net 
+✅we use it as a localhost
 
-to see all the accound on local host use command
-yarn hardhat node 
-it will spinup hardhat in localhost
+✅to see all the accound on local host use command
+✅yarn hardhat node 
+✅it will spinup hardhat in localhost
 
 {we get list of accounts and websocet rpcurl}
-we use another console to run hardhat command
-before that first we set localhost netwrok in config.js
+✅we use another console to run hardhat command
+✅before that first we set localhost netwrok in config.js
 
 
-localhost:{
-      url: "http://127.0.0.1:8545/",
+✅localhost:{
+      url: "http://127.0.0.1:8545/", // get from hardhat command
       // account don't need to provide :) thanks hardhat
       chainId: 31337, // search on google for your network
     }
-    in network area
+✅in network area
 
-Now you can use second terminal to run your contract it work give localhost nodes
-here use need to run on localhost
+✅Now you can use second terminal to run your contract it work give localhost nodes
+✅here use need to run on localhost
 ============================================
-Hardhat console
 
-to run colsole use 
-yarn hardhat console --network localhost
-you can run your code here
-like javascript in node write code directly
+✅Hardhat console
+
+✅to run colsole use 
+✅yarn hardhat console --network localhost
+✅you can run your code here
+✅like javascript in node write code directly
+
+pust {
+    ss6
+}
 ============================================================================
 
 
