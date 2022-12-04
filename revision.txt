@@ -23,19 +23,10 @@ git clone <url>
 ✅all our compilaltion information go into artifacts folder
 
 
-open deploy.js in script and delete all content
-
-
-------------------------------------------------------------------------
-const {ethers} = require("hardhat")
-
-async function main(){
-  const SimpleStorageFactory = await ethers.getContractFactory("SimpleStorage")
-
-  console.log("Deploying Contract ....");
-  const simpleStorage = await SimpleStorageFactory.deploy();
-  await simpleStorage.deployed();
-  console.log(simpleStorage.address);
+✅open deploy.js in script and delete all content
+✅add content given in 
+✅push{
+    2ss
 }
 
 cmd
