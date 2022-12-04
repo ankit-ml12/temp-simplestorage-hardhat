@@ -1,0 +1,353 @@
+✅in ether.js we need to build our own infrastructure to compile code and run but we need more robust structure
+where hardhat help us
+----------------------------------------------------
+✅to copy code from github we don't need to download the code just use the below command
+git clone <url>
+
+---------------------------------------------------------------------------------
+✅Lets start out project
+
+✅yarn init
+✅yarn add --dev hardhat
+✅//dependency are use to run and devdependency is used to develop
+
+✅yarn hardhat
+✅create simplet project and follow the upcoming command
+✅install all this dependency:-
+
+
+✅yarn hardhat (to see the command)
+✅write your contract 
+✅change your solidity version with what version written in hardhat.config.js and then compile and run
+✅yarn hardhat compile (first time it make cache folder in your rootdirectory)
+✅all our compilaltion information go into artifacts folder
+
+
+open deploy.js in script and delete all content
+
+
+------------------------------------------------------------------------
+const {ethers} = require("hardhat")
+
+async function main(){
+  const SimpleStorageFactory = await ethers.getContractFactory("SimpleStorage")
+
+  console.log("Deploying Contract ....");
+  const simpleStorage = await SimpleStorageFactory.deploy();
+  await simpleStorage.deployed();
+  console.log(simpleStorage.address);
+}
+
+cmd
+yarn hardhat run .\scripts\deploy.js
+and terminal show
+Deploying Contract ....
+0x5FbDB2315678afecb367f032d93F642f64180aa3
+Done in 2.75s.
+
+best part of above code is it is working without wallet private key and rpc url how???
+
+Hardhat comes built-in with Hardhat Network, a local Ethereum network node designed for development. It allows you to deploy your contracts, run your tests and debug your code, all within the confines of your local machine.
+for more info read below article 
+------------------------------------------------------------------------
+ hard hat network
+ https://hardhat.org/hardhat-network/docs/overview
+
+
+Hardhat by default come with rpc url and private key
+You can choose whatever network you want to work with in config.js file of hardhat
+bydefault it is hardhat
+
+your can use this cmd for specific network
+yarn hardhat run .\scripts\deploy.js --network <-network name->
+to  metion you want to run above scipt on following network
+
+To deploy on goerli network  use goerli instead of hardhat
+----------------------------------------------------------------------
+before using any network you need to add that network in config.js
+
+require("@nomicfoundation/hardhat-toolbox");
+require('dotenv').config()
+
+const PRIVATE_KEY= process.env.GOERLI_PRIVATE_KEY
+const GOERLI_RPC_URL = process.env.GOERLI_RPC_URL
+
+/** @type import('hardhat/config').HardhatUserConfig */
+module.exports = {
+  defaultNetwork: "hardhat",
+  solidity: "0.8.17",
+  networks:{
+    goerli:{
+      url: GOERLI_RPC_URL, // got from alchemy
+      accounts:[PRIVATE_KEY], // from wallet
+      chainId: 5, // search on google for your network
+    },
+  }
+};
+cmd
+yarn hardhat run .\scripts\deploy.js --network goerli
+----------------------------------------------------
+for verification on etherscane 
+we use hardhat etherscane plugin 
+to install it we use
+yarn add @nomiclabs/hardhat-etherscan
+for verification we also required etherscane plugin so we need to register on etherscane 
+require it in config.js
+this api is cosider as password so we put it in .env
+we update this in config.js
+    etherscan:{
+       apiKey:ETHERSCANE_API_KEY, 
+    }
+
+code that you need to add in deploy.js
+========================================
+you can use this line of code to verify your code:- 
+npx hardhat verify --network mainnet DEPLOYED_CONTRACT_ADDRESS "Constructor argument 1"
+
+but we go with advance way by creating a function
+we use run command from hardhat where run help us to run any hardhat task
+so require(run from hardhat);
+
+we add this verify function in deploy.js to verify contract
+---
+async function verify(){
+console.log("verifying contract ....");
+try {
+  await run("verify:verify", {
+    address: contractAddress,
+    constructorArguments: args
+});
+} catch (error) {
+  if(error.message.toLowerCase().includes("already verified")){
+        console.log("allready verified");
+  }else{
+    console.log(error);
+  }
+}
+=========================================
+and call verify function at the end of the verification function
+ ---------------------------------------------------------------------------   
+ for help use yarn hardhat verify --help
+  let's think for a second. What happens when we deploy to our hard Hat Network? Well, remember, if we deploy to our Hard Hat Network, will our contract need to be verified we need to scan? Well, we know there's are different type of scane on etherscan like rinkbey, goeli or mainnet scane. But is there a Hardhead ether scan? No, of course not. Right? The hard at runtime environment is a network local to our machine. So it doesn't make sense for us to verify a hard hat network deployed contract on ether scan. So we actually don't want to call this verify function, when we're working with our local network. This is where these chain IDs are going to come in quite useful.
+
+now if we run command to deploy on hardhat network we need to stop verify function so we put some codition  before calling verification process
+
+ if(network.config.chainId===5 && 1){
+    await simpleStorage.deployTransaction.wait(6);
+    await verify(simpleStorage.address, []);
+  }
+  for this require "network" from hardhat
+  ------------------------------------------------------------------------------
+==========================================================
+  Interect with contract using hardhat 
+======================================================
+  code{{{{{{{{{{{{{
+const {ethers, run, network} = require("hardhat")
+
+async function main(){
+  const SimpleStorageFactory = await ethers.getContractFactory("SimpleStorage");
+
+  console.log("Deploying Contract ....");
+  const simpleStorage = await SimpleStorageFactory.deploy();
+  await simpleStorage.deployed();
+  console.log(simpleStorage.address);
+  // console.log(network.config);
+  if(network.config.chainId==5 && process.env.ETHERSCANE_API_KEY){
+     await simpleStorage.deployTransaction.wait(6);
+     await verify(simpleStorage.address, []);
+  }
+  const currentValue= await simpleStorage.retrieve();
+  console.log(`current value is : ${currentValue}`);
+
+  //update the current value
+  const transactionResponse = await simpleStorage.store(7);
+  await transactionResponse.wait(1)
+  const updatedValue = await simpleStorage.retrieve();
+  console.log(`updatedValue is ${updatedValue}` );
+
+}
+
+async function verify(contractAddress, args){
+  console.log("Varifying contract ...........");
+   try {   
+     await run("verify:verify", {
+       address: contractAddress,
+       constructorArguments : args,
+     })
+   } catch (e) {
+       if (e.message.toLowerCase().includes("Allready Verified")) {
+               console.log("Allready Verified");
+       } else {
+              console.log(e);
+       }
+   }
+
+}
+
+main()
+.then(()=>process.exit(0))
+.catch((error)=>console.log(error));
+
+  }}}}}}}}}}}}}
+  run on hardhat as well on goerli network
+
+  ------------------------------------------------------------------------------
+  artifacts troubleshoting
+  delete artifacts and catch file
+  if artifacts file is not present in our root directory hardhat automatically recompile to the file
+  ------------------------------------------------------------------------
+  create your custome task 
+ create task folder 
+ define task and then import it in config.js
+to see all talk use 
+yarn Hardhead
+to run task use 
+yarn hardhad <task name>
+yarn hardhat block-number --network goerli
+
+you can use task on place of script or vice versa
+authore recommended to use script
+task is better for plugin and script is better for local environment
+========================================
+const {task} = require('hardhat/config');
+
+task("block-number", "print the current block number")
+.setAction(
+    async (taskArgs, hre) =>{
+        const blockNumber = await hre.ethers.provider.getBlockNumber();
+        console.log(`current block number : ${blockNumber}`);
+    }
+)
+
+module.exports ={}
+ 
+
+Note:-
+use require('./tasks/block-number');
+in cofige.js
+
+cmd:- 
+yarn hardhat block-number --network goerli
+=========================================
+Hardhad local host node
+everytime we use hardhat it's get deleted 
+so we use local host
+
+to see all the accound on local host use command
+yarn hardhat node 
+it will spinup hardhat in localhost
+
+{we get list of accounts and websocet rpcurl}
+we use another console to run hardhat command
+before that first we set localhost netwrok in config.js
+
+
+localhost:{
+      url: "http://127.0.0.1:8545/",
+      // account don't need to provide :) thanks hardhat
+      chainId: 31337, // search on google for your network
+    }
+    in network area
+
+Now you can use second terminal to run your contract it work give localhost nodes
+here use need to run on localhost
+============================================
+Hardhat console
+
+to run colsole use 
+yarn hardhat console --network localhost
+you can run your code here
+like javascript in node write code directly
+============================================================================
+
+
+
+Running test
+make test-deploy.js in test after deleteing all the present folder inside it
+hardhat test is supported and run by mocha framework.
+
+three command
+    1 yarn hardhat test
+    2 yarn hardhat test --grap <some text of it>
+        Ex:- yarn hardhat test --grap store
+     3 it.only 
+    Write this line inside it command in code templet 
+
+code--
+inside test->test.deploy.js
+---------- 
+const {ethers} = require('hardhat')
+const {expect, assert} = require('chai')
+
+describe("SimpleStorage", function(){
+let simpleStorage, simpleStorageFactory
+beforeEach(async function () {
+   simpleStorageFactory = await ethers.getContractFactory("SimpleStorage");
+  // simpleStorageFactory = await ethers.getContractFactory('SimpleStorage')
+  simpleStorage = await simpleStorageFactory.deploy()})
+
+it("Should start with a favourite number of 0" , async function (){
+  const currentValue = await simpleStorage.retrieve()
+  const expectedValue = "0";
+  assert.equal(currentValue.toString(), expectedValue);})
+  //both line do the same thing you can use any one of them
+  // expect(currentValue.toString()).to.equal(expectedValue);})
+ it('should update when we call store', async function (){
+  const expectedValue ="7";
+  const transactionResponse = await simpleStorage.store(expectedValue);
+  await transactionResponse.wait(1);
+
+  const currentValue = await simpleStorage.retrieve()
+  assert.equal(currentValue.toString(), expectedValue);
+ })} )
+
+=======================================================================
+Gas reporter
+we gas gas info from hardhat-gas-reporter
+
+to install use yarn add hardhat-gas-reporter --dev
+
+
+if it is not present in package.json install it
+to run use cmd
+yarn hardhat gas reporter
+------------
+add this in config.js
+require('hardhat-gas-reporter')
+ gasReporter:{
+      enabled: true,
+      outputFile: "gas-report.txt",
+      noColors: true,
+      currency: "USD",
+      coinmarketcap: '1e1c69f1-3947-46cb-951f-e7d587cf22f0',
+      //// token : use for other network 
+sign up https://pro.coinmarketcap.com/account/
+to get api to convert gas into dollar
+1e1c69f1-3947-46cb-951f-e7d587cf22f0
+    }
+
+    ans add this file name in .gitignore
+-------------
+Now when we run test command it automatically give table of gas reporing
+yarn hardhat test
+=====================================================================================
+solidity coverage
+yarn add --dev solidity coverage
+{if it is not installed }
+
+require(solidity-coverage) in config.js
+run :- yarn hardhat coverage
+
+you get converage.json with all the line information    
+
+this package tell us how much line of solidity is cover in testing
+
+
+add 
+artifacts
+cache
+gas reporter file
+coverage file in gitignore
+
+
+hardhat waffle help us to do edvance testing
