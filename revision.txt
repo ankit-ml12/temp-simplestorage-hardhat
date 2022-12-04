@@ -193,11 +193,11 @@ pust {
 
 
 
-Running test
+✅Running test
 make test-deploy.js in test after deleteing all the present folder inside it
 hardhat test is supported and run by mocha framework.
 
-three command
+✅three command
     1 yarn hardhat test
     2 yarn hardhat test --grap <some text of it>
         Ex:- yarn hardhat test --grap store
@@ -205,23 +205,23 @@ three command
     Write this line inside it command in code templet 
 
 code--
-inside test->test.deploy.js
 ---------- 
-push{
+✅push{
     ss7
 }
 =======================================================================
-Gas reporter
+✅Gas reporter
 we gas gas info from hardhat-gas-reporter
 
-to install use yarn add hardhat-gas-reporter --dev
+✅to install use yarn add hardhat-gas-reporter --dev
 
 
 if it is not present in package.json install it
 to run use cmd
-yarn hardhat gas reporter
+yarn hardhat gas 
+✅yarn hardhat gas reporter
 ------------
-add this in config.js
+✅add this in config.js
 require('hardhat-gas-reporter')
  gasReporter:{
       enabled: true,
@@ -237,26 +237,29 @@ to get api to convert gas into dollar
 
     ans add this file name in .gitignore
 -------------
-Now when we run test command it automatically give table of gas reporing
-yarn hardhat test
+✅Now when we run test command it automatically give table of gas reporing
+✅yarn hardhat test
 =====================================================================================
-solidity coverage
-yarn add --dev solidity coverage
+✅solidity coverage
+✅yarn add --dev solidity coverage
 {if it is not installed }
 
-require(solidity-coverage) in config.js
-run :- yarn hardhat coverage
+✅require(solidity-coverage) in config.js
+✅run :- yarn hardhat coverage
 
-you get converage.json with all the line information    
+✅you get converage.json with all the line information    
 
-this package tell us how much line of solidity is cover in testing
+✅this package tell us how much line of solidity is cover in testing
 
-
+=================================================
 add 
 artifacts
 cache
 gas reporter file
 coverage file in gitignore
 
-
+==============================================
 hardhat waffle help us to do edvance testing
+==============================================
+
+THANKYOU
